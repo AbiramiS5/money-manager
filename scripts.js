@@ -59,6 +59,9 @@ function render() {
         const li = document.createElement("li");
         li.innerText = `${e.date} | ${e.desc} | ₹${e.amount} | ${e.category} | ${e.division}`;
         history.appendChild(li);
+
+        updateBalance(amount, 'income');
+        updateBalance(amount, 'expense');
     });
     let balance = 0;
 
@@ -77,4 +80,5 @@ function updateBalance(amount, type) {
 
 
 render();
+
 
