@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Money Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>💰 Money Manager</h1>
+
+<div class="summary">
+    <div>Monthly Income: ₹<span id="incomeTotal">0</span></div>
+    <div>Monthly Expense: ₹<span id="expenseTotal">0</span></div>
+</div>
+
+<div class="buttons">
+    <button onclick="openForm('income')">➕ Add Income</button>
+    <button onclick="openForm('expense')">➖ Add Expense</button>
+</div>
+
+<h2>History</h2>
+<ul id="history"></ul>
+
+<!-- Popup Form -->
+<div id="popup" class="popup hidden">
+    <div class="popup-content">
+        <h3 id="formTitle"></h3>
+
+        <input type="number" id="amount" placeholder="Amount">
+        <input type="text" id="desc" placeholder="Description">
+
+        <select id="category">
+            <option>Food</option>
+            <option>Fuel</option>
+            <option>Medical</option>
+            <option>Loan</option>
+            <option>Other</option>
+        </select>
+
+        <select id="division">
+            <option>Personal</option>
+            <option>Office</option>
+        </select>
+
+        <button onclick="addEntry()">Save</button>
+        <button onclick="closeForm()">Cancel</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
