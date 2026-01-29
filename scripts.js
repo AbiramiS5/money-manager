@@ -60,6 +60,16 @@ function render() {
         li.innerText = `${e.date} | ${e.desc} | ₹${e.amount} | ${e.category} | ${e.division}`;
         history.appendChild(li);
     });
+    let balance = 0;
+
+function updateBalance(amount, type) {
+    if (type === 'income') {
+        balance += amount;
+    } else if (type === 'expense') {
+        balance -= amount;
+    }
+    document.getElementById('balance').innerText = balance;
+}
 
     document.getElementById("incomeTotal").innerText = income;
     document.getElementById("expenseTotal").innerText = expense;
@@ -67,3 +77,4 @@ function render() {
 
 
 render();
+
