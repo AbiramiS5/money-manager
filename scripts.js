@@ -1,84 +1,84 @@
-let type = "income";
+let balance = 0;
 
-let data = JSON.parse(localStorage.getItem("moneyData")) || [];
+// Load history from localStorage (optional)
+let historyData = JSON.parse(localStorage.getItem("moneyHistory")) || [];
 
-function openForm(t) {
-    type = t;
-    document.getElementById("popup").classList.remove("hidden");
-    document.getElementById("formTitle").innerText =
-        t === "income" ? "Add Income" : "Add Expense";
+function updateBalance() {
+    document.getElementById("balance").innerText = balance;
 }
 
-function closeForm() {
-    document.getElementById("popup").classList.add("hidden");
-    clearForm();
+function updateHistory() {
+    const historyList = document.getElementById("history");
+    historyList.innerHTML = "";
+    historyData.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            ${item.description} : ₹${item.amount} (${item.type})
+            <button onclick="deleteEntry(${index})">X</button>
+        `;
+        li.style.color = item.type === "income" ? "green" : "red";
+        historyList.appendChild(li);
+    });
 }
 
-function clearForm() {
-    document.getElementById("amount").value = "";
-    document.getElementById("desc").value = "";
+function saveHistory() {
+    localStorage.setItem("moneyHistory", JSON.stringify(historyData));
 }
 
-function addEntry() {
-    const amount = Number(document.getElementById("amount").value);
-    const desc = document.getElementById("desc").value;
-    const category = document.getElementById("category").value;
-    const division = document.getElementById("division").value;
+function addIncome() {
+    const desc = document.getElementById("description").value;
+    const amt = Number(document.getElementById("amount").value);
 
-    if (!amount || !desc) {
-        alert("Please fill all fields");
+    if (!desc || amt <= 0) {
+        alert("Enter valid description and amount");
         return;
     }
 
-    const entry = {
-        type,
-        amount,
-        desc,
-        category,
-        division,
-        date: new Date().toLocaleDateString()
-    };
+    balance += amt;
+    historyData.push({ description: desc, amount: amt, type: "income" });
 
-    data.push(entry);
-    localStorage.setItem("moneyData", JSON.stringify(data));
-
-    closeForm();
-    render();
+    updateBalance();
+    updateHistory();
+    saveHistory();
+    clearInputs();
 }
 
-function render() {
-    const history = document.getElementById("history");
-    history.innerHTML = "";
+function addExpense() {
+    const desc = document.getElementById("description").value;
+    const amt = Number(document.getElementById("amount").value);
 
-    let income = 0, expense = 0;
-
-    data.forEach(e => {
-        if (e.type === "income") income += e.amount;
-        else expense += e.amount;
-
-        const li = document.createElement("li");
-        li.innerText = `${e.date} | ${e.desc} | ₹${e.amount} | ${e.category} | ${e.division}`;
-        history.appendChild(li);
-
-        updateBalance(amount, 'income');
-        updateBalance(amount, 'expense');
-    });
-    let balance = 0;
-
-function updateBalance(amount, type) {
-    if (type === 'income') {
-        balance += amount;
-    } else if (type === 'expense') {
-        balance -= amount;
+    if (!desc || amt <= 0) {
+        alert("Enter valid description and amount");
+        return;
     }
-    document.getElementById('balance').innerText = balance;
+
+    balance -= amt;
+    historyData.push({ description: desc, amount: amt, type: "expense" });
+
+    updateBalance();
+    updateHistory();
+    saveHistory();
+    clearInputs();
 }
 
-    document.getElementById("incomeTotal").innerText = income;
-    document.getElementById("expenseTotal").innerText = expense;
+function deleteEntry(index) {
+    const item = historyData[index];
+    if (item.type === "income") balance -= item.amount;
+    else balance += item.amount;
+
+    historyData.splice(index, 1);
+    updateBalance();
+    updateHistory();
+    saveHistory();
 }
 
+function clearInputs() {
+    document.getElementById("description").value = "";
+    document.getElementById("amount").value = "";
+}
 
-render();
+// Initialize
+updateBalance();
+updateHistory();
 
 
