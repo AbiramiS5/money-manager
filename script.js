@@ -65,4 +65,5 @@ function render() {
     document.getElementById("expenseTotal").innerText = expense;
 }
 
+
 render();
